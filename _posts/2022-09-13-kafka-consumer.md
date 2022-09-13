@@ -6,69 +6,63 @@ tags: [kafka, kafka-consumer, stream Data processing]
 pin: true
 ---
 # Kafka consumer
-
-- kafka consumer 란
-    
-    데이터 read(poll) 주체 
-    
-    commit을 통해 consumer offset을 카프카에 기록
+<h3 data-toc-skip>kafka consumer 란</h3>
+:데이터 read(poll) 주체 
+:commit을 통해 consumer offset을 카프카에 기록
 
 ![Desktop View](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-13-kafka-consumer/1.png?raw=true){: width="700" height="400" }
 
+:consumer가 자동이나 수동으로 읽은 데이터의 위치를 commit하여 다시 읽음을 방지한다
+:__consumer_offsets라는 Internal Topic에서 consumer offset을 저장하여 관리한다
 
-— consumer가 자동이나 수동으로 읽은 데이터의 위치를 commit하여 다시 읽음을 방지함
+<h3 data-toc-skip>consumer 작동 방식</h3>
 
-— __consumer_offsets라는 Internal Topic에서 consumer offset을 저장하여 관리함
-
-- consumer 작동 방식
-
-1. single consumer
+<h4 data-toc-skip>1. single consumer</h4>
 
 ![Desktop View](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-13-kafka-consumer/2.png?raw=true){: width="700" height="400" }
+:Topic의 모든 partition 에서 모든 Record를 consume한다.
 
+<h4 data-toc-skip>2. multiple consumer</h4>
 
-— Topic의 모든 partition 에서 모든 Record를 consume한다.
-
-2. multiple consumer
-
-** 동일한 group.id로 구성된 모든 consumer들은 하나의 consumer group을 형성한다.
+> 동일한 group.id로 구성된 모든 consumer들은 하나의 consumer group을 형성한다.
+{: .prompt-info }
 
 ![Desktop View](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-13-kafka-consumer/3.png?raw=true){: width="700" height="400" }
+:partition 은 항상 consumer group에서 하나의 consumer에 의해서만 사용이 된다.
+:consumer group의 consumer들은 작업량을 어느정도 균등하게 분할한다. 
 
-— partition 은 항상 consumer group에서 하나의 consumer에 의해서만 사용이 된다.
-
-— consumer group의 consumer들은 작업량을 어느정도 균등하게 분할한다. 
 
 ![Desktop View](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-13-kafka-consumer/4.png?raw=true){: width="700" height="400" }
+:다른 consumer group의 consumer들은 분리되어 독립적으로 작동이 된다. 
 
-— 다른 consumer group의 consumer들은 분리되어 독립적으로 작동이 된다. 
 
-- consumer group 과 rebalancing
+<h4 data-toc-skip>3. consumer group 과 rebalancing</h4>
 
 ![Desktop View](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-13-kafka-consumer/5.png?raw=true){: width="700" height="400" }
 
+> consumer group의 consumer는 자신들이 읽는 토픽 파티션의 소유권을 공유한다. 
+{: .prompt-tip }
 
-— consumer group의 consumer는 자신들이 읽는 토픽 파티션의 소유권을 공유한다. 
+:새로운 consumer를 그룹에 추가할때, 특정 consumer에 문제가 생겨 중단될때 (consumer가 오랫동안 하트비트를 보내지 않으면 세션 타임아웃) 일어난다.
+:Rebalancing 하는 동안에는 consumer들은 메세지를 읽을 수 없으므로 해당 그룹 전체가 잠시 사용 불가능하다.
 
-** rebalancing : 한 consumer로 부터 다른 consumer로 파티션 소유권을 이전하는 것
+> Rebalancing : 한 consumer로 부터 다른 consumer로 파티션 소유권을 이전하는 것
+{: .prompt-tip }
 
-새로운 consumer를 그룹에 추가할때, 특정 consumer에 문제가 생겨 중단될때 (consumer가 오랫동안 하트비트를 보내지 않으면 세션 타임아웃) 일어남. 
 
-      리밸런싱 하는 동안에는 consumer들은 메세지를 읽을 수 없으므로 해당 그룹 전체가 잠시 사용 불가능함.
+<h3 data-toc-skip>commit 과 offset</h3>
 
- 
-
-- commit 과  offset
+commit 
+: 파티션 내부의 현재 위치를 변경하는 것
     
-    commit : 파티션 내부의 현재 위치를 변경하는 것
-    
-    offset : 컨슈머 자신이 읽는 레코드의 현재 위치 
-    
-    리밸런싱의 문제가 발생하면, 각 consumer는 이전과 다른 파티션을 할당받게 될 수 있다.
-    
-    이에 따라 메세지를 중복처리하거나 유실되는 경우가 있다. 
-    
-    특히,  consumer 를 구성할 때, enable.auto.commit=true 로 두면 아래와 같은 경우 발생가능성이 있음.
+offset 
+: 컨슈머 자신이 읽는 레코드의 현재 위치 
+
+
+
+> 리밸런싱의 문제가 발생하면, 각 consumer는 이전과 다른 파티션을 할당받게 될 수 있다. 이에 따라 메세지를 중복처리하거나 유실되는 경우가 있다. 특히,  consumer 를 구성할 때, enable.auto.commit=true 로 두면 아래와 같은 경우 발생가능성이 있음.
+{: .prompt-warning }
+
     
 1. 중복처리 경우
 
@@ -79,22 +73,24 @@ pin: true
 
 ![Desktop View](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-13-kafka-consumer/7.png?raw=true){: width="700" height="400" }
 
-- consumer 구성에서 중요한 configuration
-    
-    — auto.offset.reset : 커밋된 오프셋이 없는 파티션을 컨슈머가 읽기 시작할때, 또는 커밋된 오프셋이 있지만 유효하지 않을때, 컨슈머가 어떤 레코드를 읽을지 제어하는 매개변수
-    
-    latest(default) : (컨슈머가 실행 된 후 새로 추가된 레코드들) 을 읽음
-    
-    earliest : 해당 파티션의 맨 앞부터 모든 데이터를 읽음
-    
-    — enable.auto.commit : 컨슈머의 오프셋 커밋을 자동으로 할 것인지에 대한 제어
-    
-    true(default) : [auto.commit.interver.ms](http://auto.commit.interver.ms/) 로 자동으로 오프셋 커밋하는 시간 간격을 제어 할 수 있다.
-    
-> 속도가 가장 빠르고,  commit 관련 코드를 작성할 필요가 없는 장점이 있다.
-{: .prompt-tip }
 
-    false :  commitSync,  commitAsync 사용 하여 offset commit을 제어함
+
+
+<h4 data-toc-skip>consumer 구성에서 중요한 configuration</h4>
+    
+auto.offset.reset 
+: 커밋된 오프셋이 없는 파티션을 컨슈머가 읽기 시작할때, 또는 커밋된 오프셋이 있지만 유효하지 않을때, 컨슈머가 어떤 레코드를 읽을지 제어하는 매개변수
+    
+latest(default) 
+: (컨슈머가 실행 된 후 새로 추가된 레코드들) 을 읽음
+    
+earliest 
+: 해당 파티션의 맨 앞부터 모든 데이터를 읽음
+    
+enable.auto.commit 
+: 컨슈머의 오프셋 커밋을 자동으로 할 것인지에 대한 제어 
+    - true(default) ; [auto.commit.interver.ms](http://auto.commit.interver.ms/) 로 자동으로 오프셋 커밋하는 시간 간격을 제어 할 수 있다. 속도가 가장 빠르고,  commit 관련 코드를 작성할 필요가 없는 장점이 있다.
+    - false ; commitSync,  commitAsync 사용 하여 offset commit을 제어함
     
 
 ![Desktop View](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-13-kafka-consumer/8.png?raw=true){: width="700" height="400" }
@@ -103,26 +99,21 @@ pin: true
 ![Desktop View](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-13-kafka-consumer/9.png?raw=true){: width="700" height="400" }
 자동 커밋 중 리밸런스가 일어났을 때 
 
-- commitSync : 현재 오프셋 커밋
-    
-    — consumerRecord 처리순서를 보장한다. 
-    
-    — 가장느림 ( 커밋이 완료될 때 까지 block )
-    
-    — poll() method로 반환된 consumerRecord의 마지막 offset을 커밋한다. 
-    
-- commitAsync
-    
-    — commitSync 보다는 빠르다 ( 브로커의 commit 응답을 기다리는 대신, commit 요청을 전송하고 처리      를 계속 할 수 있음) 
-    
-    — 중복이 발생할 수 있다 ( 일시적인 통신문제로 이전 offset 보다 이후 offset 이 먼저 commit 이 될때 )
-    
-    — consumerRecord 처리 순서를 보장하지 못한다. 
+
+<h4 data-toc-skip>commitSync : 현재 오프셋 커밋</h4>
+1. consumerRecord 처리순서를 보장한다. 
+2. 가장느림 ( 커밋이 완료될 때 까지 block )
+3. poll() method로 반환된 consumerRecord의 마지막 offset을 커밋한다. 
     
 
----
+<h4 data-toc-skip>commitAsync</h4>
+1.commitSync 보다는 빠르다 ( 브로커의 commit 응답을 기다리는 대신, commit 요청을 전송하고 처리      를 계속 할 수 있음) 
+2.중복이 발생할 수 있다 ( 일시적인 통신문제로 이전 offset 보다 이후 offset 이 먼저 commit 이 될때 )
+3.consumerRecord 처리 순서를 보장하지 못한다. 
 
-- offset을 다루는 방법
+
+
+<h3 data-toc-skip>offset을 다루는 방법</h3>
 
 1. Consumer Group의  offset 상태 확인
 
