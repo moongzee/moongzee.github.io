@@ -8,15 +8,20 @@ pin: true
 # Kafka consumer
 <h3 data-toc-skip>kafka consumer 란</h3>
 
-데이터 read(poll) 주체
+데이터 read(poll) 주체<br>
 commit을 통해 consumer offset을 카프카에 기록
 
+<br>
+<br>
+<br>
 ![Desktop View](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-13-kafka-consumer/1.png?raw=true){: width="700" height="400" }
 
 
-consumer가 자동이나 수동으로 읽은 데이터의 위치를 commit하여 다시 읽음을 방지한다
+consumer가 자동이나 수동으로 읽은 데이터의 위치를 commit하여 다시 읽음을 방지한다<br>
 __consumer_offsets라는 Internal Topic에서 consumer offset을 저장하여 관리한다
 
+<br>
+<br>
 <h3 data-toc-skip>consumer 작동 방식</h3>
 <h4 data-toc-skip>1. single consumer</h4>
 
@@ -32,8 +37,8 @@ Topic의 모든 partition 에서 모든 Record를 consume한다.
 
 ![Desktop View](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-13-kafka-consumer/3.png?raw=true){: width="700" height="400" }
 
-partition 은 항상 consumer group에서 하나의 consumer에 의해서만 사용이 된다.
-consumer group의 consumer들은 작업량을 어느정도 균등하게 분할한다. 
+partition 은 항상 consumer group에서 하나의 consumer에 의해서만 사용이 된다.<br>
+consumer group의 consumer들은 작업량을 어느정도 균등하게 분할한다. <br>
 
 
 ![Desktop View](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-13-kafka-consumer/4.png?raw=true){: width="700" height="400" }
@@ -48,13 +53,16 @@ consumer group의 consumer들은 작업량을 어느정도 균등하게 분할�
 > consumer group의 consumer는 자신들이 읽는 토픽 파티션의 소유권을 공유한다. 
 {: .prompt-tip }
 
-새로운 consumer를 그룹에 추가할때, 특정 consumer에 문제가 생겨 중단될때 (consumer가 오랫동안 하트비트를 보내지 않으면 세션 타임아웃) 일어난다.
-Rebalancing 하는 동안에는 consumer들은 메세지를 읽을 수 없으므로 해당 그룹 전체가 잠시 사용 불가능하다.
+<br>
+새로운 consumer를 그룹에 추가할때, 특정 consumer에 문제가 생겨 중단될때 <br>
+consumer가 오랫동안 하트비트를 보내지 않으면 세션 타임아웃 일어난다.<br>
+Rebalancing 하는 동안에는 consumer들은 메세지를 읽을 수 없으므로 해당 그룹 전체가 잠시 사용 불가능하다.<br>
 
 > Rebalancing : 한 consumer로 부터 다른 consumer로 파티션 소유권을 이전하는 것
 {: .prompt-tip }
 
-
+<br>
+<br>
 <h3 data-toc-skip>commit 과 offset</h3>
 
 commit 
@@ -82,9 +90,8 @@ offset
 <br>
 
 <h4 data-toc-skip>consumer 구성에서 중요한 configuration</h4>
-
-
-
+<br>
+<br>
 auto.offset.reset 
 : 커밋된 오프셋이 없는 파티션을 컨슈머가 읽기 시작할때, 또는 커밋된 오프셋이 있지만 유효하지 않을때, 컨슈머가 어떤 레코드를 읽을지 제어하는 매개변수
     
@@ -95,22 +102,21 @@ earliest
 : 해당 파티션의 맨 앞부터 모든 데이터를 읽음
     
 enable.auto.commit 
-: 컨슈머의 오프셋 커밋을 자동으로 할 것인지에 대한 제어 
- true(default) ; [auto.commit.interver.ms](http://auto.commit.interver.ms/) 로 자동으로 오프셋 커밋하는 시간 간격을 제어 할 수 있다. 속도가 가장 빠르고,  commit 관련 코드를 작성할 필요가 없는 장점이 있다.
+: 컨슈머의 오프셋 커밋을 자동으로 할 것인지에 대한 제어 <br>
+ true(default) ; [auto.commit.interver.ms](http://auto.commit.interver.ms/) 로 자동으로 오프셋 커밋하는 시간 간격을 제어 할 수 있다. 속도가 가장 빠르고,  commit 관련 코드를 작성할 필요가 없는 장점이 있다.<br>
  false ; commitSync,  commitAsync 사용 하여 offset commit을 제어함
     
 <br>
 <br>
 <br>
 
-
+자동 커밋 상황
 ![Desktop View](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-13-kafka-consumer/8.png?raw=true){: width="700" height="400" }
 
-자동 커밋 상황
-    
-![Desktop View](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-13-kafka-consumer/9.png?raw=true){: width="700" height="400" }
 
 자동 커밋 중 리밸런스가 일어났을 때 
+![Desktop View](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-13-kafka-consumer/9.png?raw=true){: width="700" height="400" }
+
 
 
 <h4 data-toc-skip>commitSync : 현재 오프셋 커밋</h4>
@@ -120,10 +126,8 @@ enable.auto.commit
     
 
 <h4 data-toc-skip>commitAsync</h4>
-1.commitSync 보다는 빠르다 
-    - 브로커의 commit 응답을 기다리는 대신, commit 요청을 전송하고 처리를 계속 할 수 있음 
-2.중복이 발생할 수 있다
-    - 일시적인 통신문제로 이전 offset 보다 이후 offset 이 먼저 commit 이 될때
+1.commitSync 보다는 빠르다 <br> 브로커의 commit 응답을 기다리는 대신, commit 요청을 전송하고 처리를 계속 할 수 있음 
+2.중복이 발생할 수 있다 <br> 일시적인 통신문제로 이전 offset 보다 이후 offset 이 먼저 commit 이 될때
 3.consumerRecord 처리 순서를 보장하지 못한다
 
 
@@ -132,7 +136,7 @@ enable.auto.commit
 
 <h4 data-toc-skip>1. Consumer Group의  offset 상태 확인</h4>
 
-consumer group을 지정하고 `--describe`옵션을 사용하면 현재 consumer group의 offset 정보를 볼 수 있다. 명령어는 다음과 같다.
+consumer group을 지정하고 `--describe`옵션을 사용하면 현재 consumer group의 offset 정보를 볼 수 있다.<br>명령어는 다음과 같다.
 
 ```bash
 kafka-consumer-groups \
@@ -153,26 +157,31 @@ example.topic 3          6397170269      6397170495      226             consume
 
 TOPIC
 : 토픽 이름
+
 PARTITION
 : consumer group 내의 각 consumer가 할당된 파티션 번호
+
 CURRENT-OFFSET
 : 현재 consumer group의 consumer가 각 파티션에서 마지막으로 offset을 commit한 값
+
 LOG-END-OFFSET
 : producer쪽에서 마지막으로 생성한 레코드의 offset
+
 LAG
 : LOG-END-OFFSET에서 CURRENT-OFFSET를 뺀 값.
 
-`--describe`를 통해 조회를 했을때 LAG이 계속 일정 수준을 유지한다면 consumer가 producer 가 만들어내는 이벤트 레코드의 양을 잘 따라가고있다는 것을 확인할 수 있다. 
-하지만 LAG이 계속 증가한다면 consumer의 처리 속도가 느린 것이기 때문에 consumer의 갯수를 충분히 증가시키거나, consumer의 로직을 더 간략화 해서 빠른 속도로 데이터 처리를 할 수 있도록 변경해야 한다.
+`--describe`를 통해 조회를 했을때 LAG이 계속 일정 수준을 유지한다면 consumer가 producer 가 만들어내는 이벤트 레코드의 양을 잘 따라가고있다는 것을 확인할 수 있다.<br> 
+하지만 LAG이 계속 증가한다면 consumer의 처리 속도가 느린 것이기 때문에 consumer의 갯수를 충분히 증가시키거나, <br>
+consumer의 로직을 더 간략화 해서 빠른 속도로 데이터 처리를 할 수 있도록 변경해야 한다.<br>
 
 
 <h4 data-toc-skip>2. Consumer Group의  offset reset</h4>
 
-kafka에서 데이터를 불러와서 처리하는 과정에서 오류가 발생하거나 문제가 발견된 경우, 
-다시 원하는 offset부터 데이터를 재처리를 해야할 경우가 종종 있다. 
-이때 consumer group의 offset reset 기능을 활용하면 된다.
+kafka에서 데이터를 불러와서 처리하는 과정에서 오류가 발생하거나 문제가 발견된 경우,<br>
+다시 원하는 offset부터 데이터를 재처리를 해야할 경우가 종종 있다.<br> 
+이때 consumer group의 offset reset 기능을 활용하면 된다.<br>
 
-** consumer group이 실행중인 상태에 offset reset을 진행하는 경우 reset은 실패한다.
+** consumer group이 실행중인 상태에 offset reset을 진행하는 경우 reset은 실패한다.<br>
 
 ```bash
 kafka-consumer-groups \
@@ -184,19 +193,19 @@ kafka-consumer-groups \
 --execute
 ```
 
-`-topic` 대신 `-all-topics`를 지정하면 모든 토픽에 대해서 실행이 가능하다.
-`-execute` 옵션을 제거하고 실행하면 실제 반영되지 않고 어떻게 변할지 결과만 출력하는 dry run이 가능하다.
+`-topic` 대신 `-all-topics`를 지정하면 모든 토픽에 대해서 실행이 가능하다.<br>
+`-execute` 옵션을 제거하고 실행하면 실제 반영되지 않고 어떻게 변할지 결과만 출력하는 dry run이 가능하다.<br>
 
 
 <h4 data-toc-skip>offset 의 위치를 재설정 하기 위한 옵션 </h4>
 
-`-shift-by <Long: number-of-offsets>` 형식 (+/- 모두 가능)
-`-to-offset <Long: offset>`
-`-to-current`
-`-by-duration <String: duration>` : 형식 ‘PnDTnHnMnS’
-`-to-datetime <String: datetime>` : 형식 ‘YYYY-MM-DDTHH:mm:SS.sss’
-`-to-latest`
-`-to-earliest`
+`-shift-by <Long: number-of-offsets>` 형식 (+/- 모두 가능)<br>
+`-to-offset <Long: offset>`<br>
+`-to-current`<br>
+`-by-duration <String: duration>` : 형식 ‘PnDTnHnMnS’<br>
+`-to-datetime <String: datetime>` : 형식 ‘YYYY-MM-DDTHH:mm:SS.sss’<br>
+`-to-latest`<br>
+`-to-earliest`<br>
 
 
 
