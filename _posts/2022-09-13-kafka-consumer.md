@@ -4,15 +4,14 @@ date: 2022-09-13 00:00:00 +0900
 header:
     overlay_color: "#000"
     overlay_filter: "0.5"
-  
-excerpt: "Kafka"
-
+ 
 categories: 
-- Kafka
-- consumer
+- Stream Data Processing
+- kafka
 tag: 
 - kafka
 - stream_data
+- kafka_consumer
 
 ---
 # Kafka consumer
@@ -24,7 +23,7 @@ tag:
     commit을 통해 consumer offset을 카프카에 기록
     
 
-![/assets/images/posts/2022-09-13-kafka-consumer/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-04-13_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_10.08.33.png)
+![Desktop View](/images/posts/2022-09-13-kafka-consumer/1.png){: width="972" height="589" }
 
 — consumer가 자동이나 수동으로 읽은 데이터의 위치를 commit하여 다시 읽음을 방지함
 
@@ -34,7 +33,7 @@ tag:
 
 1. single consumer
 
-![스크린샷 2022-04-13 오후 10.11.01.png](Kafka%20consumer%208aceb8fa99044c23b27a758396a6654c/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-04-13_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_10.11.01.png)
+![Desktop View](/images/posts/2022-09-13-kafka-consumer/2.png){: width="972" height="589" }
 
 — Topic의 모든 partition 에서 모든 Record를 consume한다.
 
@@ -42,19 +41,19 @@ tag:
 
 ** 동일한 group.id로 구성된 모든 consumer들은 하나의 consumer group을 형성한다.
 
-![스크린샷 2022-04-13 오후 10.14.08.png](Kafka%20consumer%208aceb8fa99044c23b27a758396a6654c/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-04-13_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_10.14.08.png)
+![Desktop View](/images/posts/2022-09-13-kafka-consumer/3.png){: width="972" height="589" }
 
 — partition 은 항상 consumer group에서 하나의 consumer에 의해서만 사용이 된다.
 
 — consumer group의 consumer들은 작업량을 어느정도 균등하게 분할한다. 
 
-![스크린샷 2022-04-13 오후 10.11.56.png](Kafka%20consumer%208aceb8fa99044c23b27a758396a6654c/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-04-13_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_10.11.56.png)
+![Desktop View](/images/posts/2022-09-13-kafka-consumer/4.png){: width="972" height="589" }
 
 — 다른 consumer group의 consumer들은 분리되어 독립적으로 작동이 된다. 
 
 - consumer group 과 rebalancing
 
-![스크린샷 2022-04-13 오후 10.30.36.png](Kafka%20consumer%208aceb8fa99044c23b27a758396a6654c/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-04-13_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_10.30.36.png)
+![Desktop View](/images/posts/2022-09-13-kafka-consumer/5.png){: width="972" height="589" }
 
 — consumer group의 consumer는 자신들이 읽는 토픽 파티션의 소유권을 공유한다. 
 
@@ -80,11 +79,11 @@ tag:
     
     1. 중복처리 경우
 
-![스크린샷 2022-04-13 오후 10.42.29.png](Kafka%20consumer%208aceb8fa99044c23b27a758396a6654c/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-04-13_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_10.42.29.png)
+![Desktop View](/images/posts/2022-09-13-kafka-consumer/6.png){: width="972" height="589" }
 
 1. 유실되는 경우
 
-![스크린샷 2022-04-13 오후 10.43.06.png](Kafka%20consumer%208aceb8fa99044c23b27a758396a6654c/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-04-13_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_10.43.06.png)
+![Desktop View](/images/posts/2022-09-13-kafka-consumer/7.png){: width="972" height="589" }
 
 - consumer 구성에서 중요한 configuration
     
@@ -102,12 +101,12 @@ tag:
     
     false :  commitSync,  commitAsync 사용 하여 offset commit을 제어함
     
-    ![자동 커밋 상황](Kafka%20consumer%208aceb8fa99044c23b27a758396a6654c/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-04-13_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_11.17.29.png)
+![Desktop View](/images/posts/2022-09-13-kafka-consumer/8.png){: width="972" height="589" }
     
     자동 커밋 상황
     
 
-![자동 커밋 중 리밸런스가 일어났을 때 ](Kafka%20consumer%208aceb8fa99044c23b27a758396a6654c/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-04-13_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_11.18.02.png)
+![Desktop View](/images/posts/2022-09-13-kafka-consumer/9.png){: width="972" height="589" }
 
 자동 커밋 중 리밸런스가 일어났을 때 
 
