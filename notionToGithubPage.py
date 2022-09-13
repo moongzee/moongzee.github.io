@@ -75,7 +75,8 @@ def ModifiedMarkDownFile():
 
     #Write Modified MarkDown
     newMarkdownFileName="{}-{}.md".format(currentTimeStr,fileName)
-    with open(newMarkdownFileName,'w', encoding='UTF8') as f:
+    writeFileName="_posts/"+newMarkdownFileName
+    with open(writeFileName,'w', encoding='UTF8') as f:
         f.write(frontMatter+n)
     
     #Remove md file
