@@ -80,10 +80,10 @@ theme_mode: dark  # [light|dark]
 #
 
 # e.g. 'https://cdn.com'
-img_cdn: 'https://github.com'
+img_cdn: 'https://github.com/moongzee/moongzee.github.io/blob/main'
 
 # the avatar on sidebar, support local or CORS resources
-avatar: '/moongzee/moongzee.github.io/blob/main/assets/img/profile/profile_jh.jpg?raw=true'
+avatar: '/assets/img/profile/profile_jh.jpg?raw=true'
 
 # boolean type, the global switch for ToC in posts.
 toc: true
