@@ -12,7 +12,7 @@ tag:
 - kafka
 - stream_data
 - kafka_consumer
-
+pin: true
 ---
 # Kafka consumer
 
@@ -22,9 +22,8 @@ tag:
     
     commit을 통해 consumer offset을 카프카에 기록
 
-```markdown
-![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/1.png){: width="972" height="589" }
-```
+![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/1.png){: width="700" height="400" }
+
 
 — consumer가 자동이나 수동으로 읽은 데이터의 위치를 commit하여 다시 읽음을 방지함
 
@@ -34,34 +33,29 @@ tag:
 
 1. single consumer
 
-```markdown
-![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/2.png){: width="972" height="589" }
-```
+![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/2.png){: width="700" height="400" }
+
 
 — Topic의 모든 partition 에서 모든 Record를 consume한다.
 
-1. multiple consumer
+2. multiple consumer
 
 ** 동일한 group.id로 구성된 모든 consumer들은 하나의 consumer group을 형성한다.
 
-```markdown
-![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/3.png){: width="972" height="589" }
-```
+![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/3.png){: width="700" height="400" }
+
 — partition 은 항상 consumer group에서 하나의 consumer에 의해서만 사용이 된다.
 
 — consumer group의 consumer들은 작업량을 어느정도 균등하게 분할한다. 
 
-```markdown
-![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/4.png){: width="972" height="589" }
-```
+![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/4.png){: width="700" height="400" }
 
 — 다른 consumer group의 consumer들은 분리되어 독립적으로 작동이 된다. 
 
 - consumer group 과 rebalancing
 
-```markdown
-![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/5.png){: width="972" height="589" }
-```
+![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/5.png){: width="700" height="400" }
+
 
 — consumer group의 consumer는 자신들이 읽는 토픽 파티션의 소유권을 공유한다. 
 
@@ -85,17 +79,14 @@ tag:
     
     특히,  consumer 를 구성할 때, enable.auto.commit=true 로 두면 아래와 같은 경우 발생가능성이 있음.
     
-    1. 중복처리 경우
+1. 중복처리 경우
 
-```markdown
-![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/6.png){: width="972" height="589" }
-```
+![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/6.png){: width="700" height="400" }
 
-1. 유실되는 경우
 
-```markdown
-![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/7.png){: width="972" height="589" }
-```
+2. 유실되는 경우
+
+![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/7.png){: width="700" height="400" }
 
 - consumer 구성에서 중요한 configuration
     
@@ -113,16 +104,15 @@ tag:
     
     false :  commitSync,  commitAsync 사용 하여 offset commit을 제어함
     
-```markdown
-![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/8.png){: width="972" height="589" }
-```
+
+![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/8.png){: width="700" height="400" }
+
     
     자동 커밋 상황
     
 
-```markdown
-![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/9.png){: width="972" height="589" }
-```
+![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/9.png){: width="700" height="400" }
+
 
 자동 커밋 중 리밸런스가 일어났을 때 
 
@@ -152,7 +142,10 @@ tag:
 consumer group을 지정하고 `--describe`옵션을 사용하면 현재 consumer group의 offset 정보를 볼 수 있다. 명령어는 다음과 같다.
 
 ```bash
-kafka-consumer-groups --bootstrap-server <host:port> --group <group.id> --describe
+kafka-consumer-groups \
+--bootstrap-server <host:port> \
+--group <group.id> \
+--describe
 ```
 
 실행결과 예시
@@ -173,14 +166,20 @@ example.topic 3          6397170269      6397170495      226             consume
 
 `--describe`를 통해 조회를 했을때 LAG이 계속 일정 수준을 유지한다면 consumer가 producer 가 만들어내는 이벤트 레코드의 양을 잘 따라가고있다는 것을 확인할 수 있다. 하지만 LAG이 계속 증가한다면 consumer의 처리 속도가 느린 것이기 때문에 consumer의 갯수를 충분히 증가시키거나, consumer의 로직을 더 간략화 해서 빠른 속도로 데이터 처리를 할 수 있도록 변경해야 한다.
 
-1. Consumer Group의  offset reset
+2. Consumer Group의  offset reset
 
 kafka에서 데이터를 불러와서 처리하는 과정에서 오류가 발생하거나 문제가 발견된 경우, 다시 원하는 offset부터 데이터를 재처리를 해야할 경우가 종종 있다. 이때 consumer group의 offset reset 기능을 활용하면 된다.
 
 ** consumer group이 실행중인 상태에 offset reset을 진행하는 경우 reset은 실패한다.
 
 ```bash
-kafka-consumer-groups --bootstrap-server <host:port> --group <group> --topic <topic> --reset-offsets --to-earliest --execute
+kafka-consumer-groups \
+--bootstrap-server <host:port> \
+--group <group> \
+--topic <topic> \
+--reset-offsets \
+--to-earliest \
+--execute
 ```
 
 - `-topic` 대신 `-all-topics`를 지정하면 모든 토픽에 대해서 실행이 가능하다.
@@ -201,7 +200,8 @@ kafka-consumer-groups --bootstrap-server <host:port> --group <group> --topic <to
 예시 > 특정 topic의 파티션 1번만 offset을 30으로 지정하고 싶을때 
 
 ```bash
-./kafka-consumer-groups --bootstrap-server {bootstrap 정보} \
+./kafka-consumer-groups \
+--bootstrap-server {bootstrap 정보} \
 --group click --topic {topic명}:1 \
 --reset-offsets --to-offset 30 --execute
 ```
