@@ -126,9 +126,9 @@ enable.auto.commit
     
 
 <h4 data-toc-skip>commitAsync</h4>
-1.commitSync 보다는 빠르다 
-2.중복이 발생할 수 있다 
-3.consumerRecord 처리 순서를 보장하지 못한다
+1. commitSync 보다는 빠르다 
+2. 중복이 발생할 수 있다 
+3. consumerRecord 처리 순서를 보장하지 못한다
 
 <br>브로커의 commit 응답을 기다리는 대신, commit 요청을 전송하고 처리를 계속 할 수 있음 
 <br>일싲거인 통신문제로 이전 offset 보다 이후 offset 이 먼저 commit 이 될 때
@@ -176,8 +176,7 @@ LAG
 
 <br>
 `--describe`를 통해 조회를 했을때 LAG이 계속 일정 수준을 유지한다면 consumer가 producer 가 만들어내는 이벤트 레코드의 양을 잘 따라가고있다는 것을 확인할 수 있다.<br> 
-하지만 LAG이 계속 증가한다면 consumer의 처리 속도가 느린 것이기 때문에 consumer의 갯수를 충분히 증가시키거나, <br>
-consumer의 로직을 더 간략화 해서 빠른 속도로 데이터 처리를 할 수 있도록 변경해야 한다.<br>
+하지만 LAG이 계속 증가한다면 consumer의 처리 속도가 느린 것이기 때문에 consumer의 갯수를 충분히 증가시키거나, consumer의 로직을 더 간략화 해서 빠른 속도로 데이터 처리를 할 수 있도록 변경해야 한다.<br>
 
 
 <h4 data-toc-skip>2. Consumer Group의  offset reset</h4>
