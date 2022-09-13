@@ -78,11 +78,12 @@ theme_mode: dark  # [light|dark]
 # Notice that once it is assigned, the CDN url
 # will be added to all image (site avatar & posts' images) paths starting with '/'
 #
+
 # e.g. 'https://cdn.com'
-img_cdn: 'https://github.com/moongzee/moongzee.github.io/blob/main'
+img_cdn: 'https://github.com'
 
 # the avatar on sidebar, support local or CORS resources
-avatar: '/assets/img/profile/profile_jh.jpg'
+avatar: '/moongzee/moongzee.github.io/blob/main/assets/img/profile/profile_jh.jpg'
 
 # boolean type, the global switch for ToC in posts.
 toc: true
