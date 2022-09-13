@@ -21,9 +21,10 @@ tag:
     데이터 read(poll) 주체 
     
     commit을 통해 consumer offset을 카프카에 기록
-    
 
-![Desktop View](/images/posts/2022-09-13-kafka-consumer/1.png){: width="972" height="589" }
+```markdown
+![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/1.png){: width="972" height="589" }
+```
 
 — consumer가 자동이나 수동으로 읽은 데이터의 위치를 commit하여 다시 읽음을 방지함
 
@@ -33,7 +34,9 @@ tag:
 
 1. single consumer
 
-![Desktop View](/images/posts/2022-09-13-kafka-consumer/2.png){: width="972" height="589" }
+```markdown
+![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/2.png){: width="972" height="589" }
+```
 
 — Topic의 모든 partition 에서 모든 Record를 consume한다.
 
@@ -41,19 +44,24 @@ tag:
 
 ** 동일한 group.id로 구성된 모든 consumer들은 하나의 consumer group을 형성한다.
 
-![Desktop View](/images/posts/2022-09-13-kafka-consumer/3.png){: width="972" height="589" }
-
+```markdown
+![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/3.png){: width="972" height="589" }
+```
 — partition 은 항상 consumer group에서 하나의 consumer에 의해서만 사용이 된다.
 
 — consumer group의 consumer들은 작업량을 어느정도 균등하게 분할한다. 
 
-![Desktop View](/images/posts/2022-09-13-kafka-consumer/4.png){: width="972" height="589" }
+```markdown
+![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/4.png){: width="972" height="589" }
+```
 
 — 다른 consumer group의 consumer들은 분리되어 독립적으로 작동이 된다. 
 
 - consumer group 과 rebalancing
 
-![Desktop View](/images/posts/2022-09-13-kafka-consumer/5.png){: width="972" height="589" }
+```markdown
+![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/5.png){: width="972" height="589" }
+```
 
 — consumer group의 consumer는 자신들이 읽는 토픽 파티션의 소유권을 공유한다. 
 
@@ -79,11 +87,15 @@ tag:
     
     1. 중복처리 경우
 
-![Desktop View](/images/posts/2022-09-13-kafka-consumer/6.png){: width="972" height="589" }
+```markdown
+![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/6.png){: width="972" height="589" }
+```
 
 1. 유실되는 경우
 
-![Desktop View](/images/posts/2022-09-13-kafka-consumer/7.png){: width="972" height="589" }
+```markdown
+![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/7.png){: width="972" height="589" }
+```
 
 - consumer 구성에서 중요한 configuration
     
@@ -101,12 +113,16 @@ tag:
     
     false :  commitSync,  commitAsync 사용 하여 offset commit을 제어함
     
-![Desktop View](/images/posts/2022-09-13-kafka-consumer/8.png){: width="972" height="589" }
+```markdown
+![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/8.png){: width="972" height="589" }
+```
     
     자동 커밋 상황
     
 
-![Desktop View](/images/posts/2022-09-13-kafka-consumer/9.png){: width="972" height="589" }
+```markdown
+![Desktop View](/assets/images/posts/2022-09-13-kafka-consumer/9.png){: width="972" height="589" }
+```
 
 자동 커밋 중 리밸런스가 일어났을 때 
 
