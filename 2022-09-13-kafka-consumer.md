@@ -1,13 +1,20 @@
 ---
-title: Kafka consumer
-author: moongzee
-date: 2022-09-13 15:00:00
-categories: [Kafka, consumer]
-tags: [kafka, kafka-consumer]
-pin: true
+title: "kafka-consumer"
+date: 2022-09-13 00:00:00 +0900
+header:
+    overlay_color: "#000"
+    overlay_filter: "0.5"
+  
+excerpt: "Kafka"
+
+categories: 
+- Kafka
+- consumer
+tag: 
+- kafka
+- stream_data
+
 ---
-
-
 # Kafka consumer
 
 - kafka consumer 란
@@ -17,7 +24,7 @@ pin: true
     commit을 통해 consumer offset을 카프카에 기록
     
 
-![스크린샷 2022-04-13 오후 10.08.33.png](Kafka%20consumer%208aceb8fa99044c23b27a758396a6654c/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-04-13_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_10.08.33.png)
+![/assets/images/posts/2022-09-13-kafka-consumer/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-04-13_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_10.08.33.png)
 
 — consumer가 자동이나 수동으로 읽은 데이터의 위치를 commit하여 다시 읽음을 방지함
 
