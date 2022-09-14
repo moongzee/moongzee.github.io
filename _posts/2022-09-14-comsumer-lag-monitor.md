@@ -15,6 +15,7 @@ pin: true
 1. Consumer lag 이란?
 2. MirrorMaker Consumer lag 모니터링 프로그램 설명
 3. Lag_monitor.py 설명
+4. [번외] AWS cloudwatch 로 consumer lag 모니터링
 
 ---
 <br>
@@ -25,9 +26,13 @@ Kafka 의 producer가 보낸 메세지의 offset과 consumer가 받은 메세지
 
 <h3 data-toc-skip>2. MirrorMaker Consumer lag 모니터링 프로그램 설명</h3>  
 
-연동하는 토픽 별 MirrorMaker Consumer lag 모니터링을 한 곳에 할 수 있다.
+MirrorMaker 구동시 제대로 작동하는지 모니터링하기 위해 consumer lag을 출력하는 쉘스크립트를 작성했었다.<br>
+하지만, 연동하는 토픽이 많을수록 스크립트 실행 창을 여러개 띄워야해서 한곳에 모아 모니터링 하는 방법을 고민했었다.<br>  
 
-Kibana 대시보드를 이용해 Consumer lag의 상태를 차트로 볼 수 있다.
+Consumer lag 모니터링의 주 목적은 다음과 같다.<br>
+1. 연동하는 토픽 별 MirrorMaker Consumer lag 모니터링을 한 곳에 할 수 있다.
+2. Kibana 대시보드를 이용해 Consumer lag의 상태를 차트로 볼 수 있다.
+
 <br>
 <br>
 
@@ -255,3 +260,55 @@ args
 : lag_pipeline 함수의 인자값 (ssh_key , es_conn , hostname , topic_name , monitor_cli )
     
 을 차례대로 입력한다.
+
+<br>
+<h3 data-toc-skip>[번외] AWS cloudwatch 로 consumer lag 모니터링</h3>
+<br>
+프로젝트 수행시 위와 같은 방법으로 consumer lag 모니터링을 했으나, role off 후 cloudwatch에 custom metric을 보낼 수 있다는 것을 알게되었다.<br>
+그래서 Toy project로 MirrorMaker의 consumer lag을 AWS cloudwatch에 custom metric으로 보내는 쉘스크립트를 작성하여 실습해보았다.<br>
+
+<h4 data-toc-skip>Architecture</h4>
+
+![Architecture](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-14-consumer-lag-monitor/4.png?raw=true)
+
+AWS CLI Cloudwatch 서비스의 put-metric-data 명령어를 활용해 <br>
+mirrormaker의 consumer lag 지표를 AWS CLoudwatch 에 custom metric으로 보내는 구조이다.<br>
+
+
+<h4 data-toc-skip>consumer-lag_to_cloudwatch.sh</h4>
+<br>
+
+```bash
+while true; do
+lag=$(/home/ec2-user/kafka_2.12-2.6.2/bin/kafka-consumer-groups.sh \
+		--bootstrap-server {source kafka bootstrap server} \
+		--group {mirrormaker consumer group} \
+		--describe \
+		--command-config /home/ec2-user/kafka_2.12-2.6.2/config/{mirrormaker consumer properties} \
+		--describe 2> /dev/null | grep test | sed 's/\s\+/\t/g' | cut -f 6 | xargs)
+aws cloudwatch put-metric-data \
+--namespace {custom metric namespace}
+--metric-name {custom metric name}
+--value $lag
+echo -e -n "$(date)\t"
+echo -e -n "topic: {topicname}\t"
+echo -e -n "consumer-lag\t"
+echo -e $lag
+sleep 1
+done
+```
+<br>
+파티션별 consumer lag 값을 가져오는 것은 따로 `--dimesion`이라는 속성값으로 구분을 해야할거같음?? (관련해서는 더 찾아봐야함)<br>
+
+<h4 data-toc-skip>consumer-lag_to_cloudwatch.sh 실행 화면</h4>
+
+![shell_execute](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-14-consumer-lag-monitor/5.png?raw=true)
+
+앞의 쉘스크립트를 실행하면 해당 토픽의 consumer lag의 값이 콘솔창에 출력이 된다.<br>
+
+
+<h4 data-toc-skip>Cloudwatch에서 custom metric 대시보드 화면</h4>
+
+![cloudwatch-dashboard](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-14-consumer-lag-monitor/5.png?raw=true)
+
+Custom mertric으로 받은 MirrorMaker consumer lag 의 값을 그림과 같이 cloudwatch 대시보드에서 확인할 수 있다.
