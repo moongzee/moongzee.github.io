@@ -311,4 +311,4 @@ done
 
 ![cloudwatch-dashboard](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-14-consumer-lag-monitor/6.png?raw=true)
 
-Custom mertric으로 받은 MirrorMaker consumer lag 의 값을 그림과 같이 cloudwatch 대시보드에서 확인할 수 있다.
+Custom mertric으로 받은 MirrorMaker consumer lag 의 값을 그림과 같이 cloudwatch 대시보드에서 확인 가능하다.
