@@ -66,7 +66,7 @@ Kibana 대시보드를 이용해 Consumer lag의 상태를 차트로 볼 수 있
 
 <h4 data-toc-skip>Lag_monitor.py 소스코드 설명</h4>
     
-<모듈 import> Lag_monitor.py를 실행하기 위한 모듈을 불러온다.
+- 모듈 import Lag_monitor.py를 실행하기 위한 모듈을 불러온다.
     
 ```python
 import time
