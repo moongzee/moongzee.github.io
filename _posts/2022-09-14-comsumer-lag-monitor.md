@@ -309,6 +309,6 @@ done
 
 <h4 data-toc-skip>Cloudwatch에서 custom metric 대시보드 화면</h4>
 
-![cloudwatch-dashboard](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-14-consumer-lag-monitor/5.png?raw=true)
+![cloudwatch-dashboard](https://github.com/moongzee/moongzee.github.io/blob/main/assets/images/posts/2022-09-14-consumer-lag-monitor/6.png?raw=true)
 
 Custom mertric으로 받은 MirrorMaker consumer lag 의 값을 그림과 같이 cloudwatch 대시보드에서 확인할 수 있다.
