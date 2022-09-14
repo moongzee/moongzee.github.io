@@ -91,7 +91,7 @@ es = Elasticsearch(['http://es-node1-ip:9200',
 ```
 <br>    
 
-#### 2. Elasticsearch Index 생성
+<h4 data-toc-skip>2. Elasticsearch Index 생성</h4>
     
 Consumer lag 정보를 저장할 index를 생성한다. 
 <br>    
@@ -110,7 +110,7 @@ index명은 consumer_lag으로 지정하였고, 만약 ‘consumer_lag’ index�
 ‘consumer_lag’ index의 schema 정보를 mapping.json 파일에 작성하였고, index 생성시 mapping.json 파일을 읽어 index의 schema 정보를 지정한다. <br>
     
 
-** mapping.json
+- mapping.json
 
 ```json
 {
