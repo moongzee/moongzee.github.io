@@ -1,0 +1,12 @@
+header:
+    overlay_color: "#000"
+    overlay_filter: "0.5"
+  
+excerpt: "Kafka"
+
+categories: 
+- Kafka
+- consumer
+tag: 
+- kafka
+- stream_data
